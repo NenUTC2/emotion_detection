@@ -14,9 +14,9 @@ class HomeController extends GetxController {
   FaceDetetorController? _faceDetect;
   bool _isDetecting = false;
   List<Face>? faces;
-  String? faceAtMoment = 'normal_face.png';
+  String? faceAtMoment = 'normal.png';
   String? label = 'No face detected';
-  Rect? curRect;
+  Rect? faceBoundingBox;
 
   HomeController() {
     _cameraManager = CameraManager();
@@ -44,12 +44,12 @@ class HomeController extends GetxController {
     if (faces != null && faces!.isNotEmpty) {
       Face? face = faces?.first;
       inspect(face);
-      curRect = face!.boundingBox;
+      faceBoundingBox = face!.boundingBox;
       label = detectSmile(face.smilingProbability);
     } else {
       faceAtMoment = 'normal_face.png';
       label = 'No face detected';
-      curRect = const Rect.fromLTRB(0.0, 0.0, 0.0, 0.0);
+      faceBoundingBox = const Rect.fromLTRB(0.0, 0.0, 0.0, 0.0);
     }
     _isDetecting = false;
     update();
@@ -57,10 +57,10 @@ class HomeController extends GetxController {
 
   String detectSmile(smileProb) {
     if (smileProb > 0.2) {
-      faceAtMoment = 'happy_face.png';
+      faceAtMoment = 'smile.png';
       return 'Smile';
     } else {
-      faceAtMoment = 'sady_face.png';
+      faceAtMoment = 'normal.png';
       return 'Normal';
     }
   }
